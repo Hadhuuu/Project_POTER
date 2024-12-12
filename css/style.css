@@ -1,0 +1,125 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: #e9ecef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Login Container */
+.login-container {
+  width: 100%;
+  max-width: 420px; /* Lebih memanjang */
+  background: url('../assets/backgroundlogin.png') no-repeat center, #ffffff;
+  background-size: cover;
+  border-radius: 12px;
+  padding: 50px 25px; /* Lebih tebal padding */
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); /* Shadow lebih tebal dan menyebar */
+  position: relative;
+}
+
+/* Logo */
+.logo {
+  width: 100px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+/* Title and Description */
+.title {
+  font-size: 28px; /* Lebih besar */
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+  margin-bottom: 5px; /* Lebih dekat ke deskripsi */
+  letter-spacing: 4px;
+}
+
+.description {
+  font-size: 16px; /* Sedikit lebih besar */
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+}
+
+/* Form Fields */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px; /* Sedikit lebih besar */
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 15px;
+  transition: background 0.3s, box-shadow 0.3s;
+  outline: none;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.8);
+}
+
+/* Button */
+#loginBtn {
+  background: linear-gradient(135deg, #0061f2, #00b8ff);
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 14px; /* Sedikit lebih besar */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#loginBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 123, 255, 0.4);
+}
+
+/* Error Message */
+#error-message {
+  display: none;
+  font-size: 13px;
+  color: #ff4d4f;
+  margin-top: 10px;
+}
+
+/* Welcome Text */
+.welcome-text {
+  margin-top: 25px; /* Sedikit lebih banyak ruang */
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .login-container {
+      width: 90%;
+      padding: 20px;
+  }
+
+  .title {
+      font-size: 24px;
+  }
+}
