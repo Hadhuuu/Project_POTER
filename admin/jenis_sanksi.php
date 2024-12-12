@@ -17,6 +17,22 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #sanksiTable {
+            width: 100%;
+            overflow: hidden;
+        }
+        #sanksiTable tbody {
+            display: block;
+            max-height: 700px; /* Batas tinggi untuk scroll */
+            overflow-y: auto;
+        }
+        #sanksiTable thead, #sanksiTable tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div class="flex h-screen px-4 py-4">

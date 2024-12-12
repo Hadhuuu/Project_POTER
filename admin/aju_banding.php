@@ -29,6 +29,21 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         .status-pending { background-color: #1e40af; } /* Blue */
         .status-accepted { background-color: #16a34a; } /* Green */
         .status-rejected { background-color: #dc2626; } /* Red */
+        
+        #mahasiswaTable {
+            width: 100%;
+            overflow: hidden;
+        }
+        #ajuBandingTable tbody {
+            display: block;
+            max-height: 700px; /* Batas tinggi untuk scroll */
+            overflow-y: auto;
+        }
+        #ajuBandingTable thead, #ajuBandingTable tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
