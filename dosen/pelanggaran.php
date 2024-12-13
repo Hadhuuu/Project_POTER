@@ -9,7 +9,7 @@
     <style>
         /* Tabel dengan scroll dan efek hover */
         #pelanggaranTable {
-            max-height: 400px;
+            max-height: 695px;
             overflow-y: auto;
             display: block;
         }
@@ -126,9 +126,9 @@
                         $('#pelanggaranTbody').empty();
                         data.forEach(function(pelanggaran) {
                             var statusClass = '';
-                            if (pelanggaran.status == 'Resolved') {
+                            if (pelanggaran.status == 'Resolved' || pelanggaran.status == 'resolved') {
                                 statusClass = 'resolved';
-                            } else if (pelanggaran.status == 'Unresolved') {
+                            } else if (pelanggaran.status == 'Unresolved' || pelanggaran.status == 'unresolved') {
                                 statusClass = 'unresolved';
                             } else {
                                 statusClass = 'innocent';
