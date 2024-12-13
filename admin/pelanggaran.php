@@ -153,9 +153,9 @@
                                     <td class="px-6 py-3">${pelanggaran.tingkatan}</td>
                                     <td class="px-6 py-3">
                                         <span class="px-4 py-2 rounded-full ${
-                                            pelanggaran.status === 'Resolved' ? 'bg-green-500' :
-                                            pelanggaran.status === 'Unresolved' ? 'bg-red-500' :
-                                            pelanggaran.status === 'Innocent' ? 'bg-gray-500' : ''}">
+                                            pelanggaran.status === 'Resolved' || pelanggaran.status === 'resolved'? 'bg-green-500' :
+                                            pelanggaran.status === 'Unresolved' || pelanggaran.status === 'unresolved' ? 'bg-red-500' :
+                                            pelanggaran.status === 'Innocent' || pelanggaran.status === 'innocent'  ? 'bg-gray-500' : ''}">
                                             ${pelanggaran.status}
                                         </span>
                                     </td>
