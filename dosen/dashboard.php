@@ -86,17 +86,31 @@ $dosen_id = $_SESSION['user_id'];  // Gunakan $_SESSION['user_id'] karena yang d
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">Dashboard Dosen</h2>
 
             <!-- Profile Section -->
-            <div class="bg-white p-8 rounded-lg shadow-md mb-6 flex items-center">
-                <img src="../assets/dosenprofile.png" alt="Foto Dosen" class="w-24 h-24 rounded-full mr-6">
-                <div>
-                    <h3 class="text-xl font-semibold mb-2">Selamat Datang, <?php echo htmlspecialchars($_SESSION['username']); ?></h3>
-                    <p><strong>NIDN:</strong> <span id="nidn"></span></p>
-                    <p><strong>Nama:</strong> <span id="nama"></span></p>
-                    <p><strong>Email:</strong> <span id="email"></span></p>
-                    <p><strong>Kelas Diampu:</strong> <span id="kelas"></span></p>
+            <div class="bg-white p-8 rounded-lg shadow-md mb-6">
+                <div class="flex items-center mb-4">
+                    <img src="../assets/dosenprofile.png" alt="Foto Dosen" class="w-24 h-24 rounded-full mr-6">
+                    <h3 class="text-xl font-semibold">Selamat Datang, <?php echo htmlspecialchars($_SESSION['username']); ?></h3>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex">
+                        <strong class="w-1/4">NIDN</strong>
+                        <span id="nidn" class="w-3/4">-</span>
+                    </div>
+                    <div class="flex">
+                        <strong class="w-1/4">Nama</strong>
+                        <span id="nama" class="w-3/4">-</span>
+                    </div>
+                    <div class="flex">
+                        <strong class="w-1/4">Email</strong>
+                        <span id="email" class="w-3/4">-</span>
+                    </div>
+                    <div class="flex">
+                        <strong class="w-1/4">Kelas Diampu</strong>
+                        <span id="kelas" class="w-3/4">-</span>
+                    </div>
                 </div>
             </div>
-
+            
             <!-- Stats Section -->
             <div class="bg-white p-6 rounded-lg shadow-md mb-6">
                 <h3 class="text-xl font-semibold mb-4">Statistik Pelanggaran yang Dilaporkan</h3>
