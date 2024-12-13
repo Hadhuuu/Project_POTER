@@ -9,7 +9,7 @@
     <style>
         /* Tabel dengan scroll dan efek hover */
         #pelanggaranTable {
-            max-height: 695px;
+            max-height: 695x;
             overflow-y: auto;
             display: block;
         }
