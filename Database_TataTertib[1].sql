@@ -99,8 +99,14 @@ CREATE TABLE ajubanding (
     FOREIGN KEY (id_pelanggaran) REFERENCES pelanggaran(id) ON DELETE CASCADE
 );
 
-SELECT * FROM akun;
-
+DELETE FROM dosen;
+DELETE FROM kelas;
+DELETE FROM mahasiswa;
+DELETE FROM akun;
+DELETE FROM jenis_pelanggaran;
+DELETE FROM jenis_sanksi;
+DELETE FROM pelanggaran;
+DELETE FROM ajubanding;
 -- mereset id agar memulai dari 1 lagi
 DBCC CHECKIDENT (dosen, RESEED, 0);
 DBCC CHECKIDENT (kelas, RESEED, 0);
@@ -207,53 +213,53 @@ INSERT INTO dosen (nidn, nama, email) VALUES
 INSERT INTO kelas (nama_kelas, prodi, angkatan, id_dpa) VALUES
 ('TI-2A', 'Teknik Informatika', 2024, 1),
 ('TI-2B', 'Teknik Informatika', 2024, 2),
-('TI-2C', 'Teknik Informatika', 2024, 2),
-('TI-2D', 'Teknik Informatika', 2024, 3),
-('TI-2E', 'Teknik Informatika', 2024, 4),
-('TI-2F', 'Teknik Informatika', 2024, 5),
-('TI-2G', 'Teknik Informatika', 2024, 6),
-('TI-2H', 'Teknik Informatika', 2024, 7),
-('TI-2I', 'Teknik Informatika', 2024, 8),
-('SIB-2A', 'Sistem Informasi Bisnis', 2024, 9),
-('SIB-2B', 'Sistem Informasi Bisnis', 2024, 10),
-('SIB-2C', 'Sistem Informasi Bisnis', 2024, 11),
-('SIB-2D', 'Sistem Informasi Bisnis', 2024, 12),
-('SIB-2E', 'Sistem Informasi Bisnis', 2024, 13),
-('SIB-2F', 'Sistem Informasi Bisnis', 2024, 14),
-('SIB-2G', 'Sistem Informasi Bisnis', 2024, 15);
+('TI-2C', 'Teknik Informatika', 2024, 3),
+('TI-2D', 'Teknik Informatika', 2024, 4),
+('TI-2E', 'Teknik Informatika', 2024, 5),
+('TI-2F', 'Teknik Informatika', 2024, 6),
+('TI-2G', 'Teknik Informatika', 2024, 7),
+('TI-2H', 'Teknik Informatika', 2024, 8),
+('TI-2I', 'Teknik Informatika', 2024, 9),
+('SIB-2A', 'Sistem Informasi Bisnis', 2024, 10),
+('SIB-2B', 'Sistem Informasi Bisnis', 2024, 11),
+('SIB-2C', 'Sistem Informasi Bisnis', 2024, 12),
+('SIB-2D', 'Sistem Informasi Bisnis', 2024, 13),
+('SIB-2E', 'Sistem Informasi Bisnis', 2024, 14),
+('SIB-2F', 'Sistem Informasi Bisnis', 2024, 15),
+('SIB-2G', 'Sistem Informasi Bisnis', 2024, 16);
 
 
 -- Data Dummy untuk Tabel mahasiswa
 INSERT INTO mahasiswa (nim, nama, ttl, email, id_kelas) VALUES
-('2341760182', 'Abhinaya NuzuluZzuHDi', '2005-01-01', 'abhinaya@polinema.ac.id', 13),
-('2341760191', 'Alvi ChoirinNikmah', '2004-02-05', 'alvi@polinema.ac.id', 13),
-('2341760119', 'Alya Ajeng Ayu', '2005-03-10', 'alya@polinema.ac.id', 13),
-('2341760124', 'Ardhe Lia Putri Maharani', '2004-04-15', 'ardhe@polinema.ac.id', 13),
-('2341760003', 'Bagas Nusa Tama', '2004-05-20', 'bagas@polinema.ac.id', 13),
-('2341760162', 'BobY RozaK Saputra', '2004-01-22', 'boby@polinema.ac.id', 13),
-('2341760187', 'Deanissa Sherly Sabilla', '2005-03-28', 'deanissa@polinema.ac.id', 13),
-('2341760107', 'Eka Putri Natalya Kabelen', '2004-06-12', 'eka@polinema.ac.id', 13),
-('2341760098', 'Firman Dzaki Rahman', '2004-07-08', 'firman@polinema.ac.id', 13),
-('2341760101', 'Fransiska Widya Krisanti', '2004-08-03', 'fransiska@polinema.ac.id', 13),
-('2341760057', 'Hudha Aji Saputra', '2005-09-19', 'hudha@polinema.ac.id', 13),
-('2341760026', 'Indi Warda Ramadhani', '2005-12-30', 'indi@polinema.ac.id', 13),
-('2341760036', 'Ismi Atika', '2004-11-15', 'ismi@polinema.ac.id', 13),
-('2341760086', 'Isnaeny Tri Larassati', '2005-05-25', 'isnaeny@polinema.ac.id', 13),
-('2341760010', 'Izzatir Rofiah', '2004-01-01', 'izzatir@polinema.ac.id', 13),
-('2341760048', 'Khoir Karol Nurzuraidah', '2004-02-18', 'khoir@polinema.ac.id', 13),
-('2341760030', 'M. Zidna Billah Faza', '2005-07-21', 'm.zidna@polinema.ac.id', 13),
-('2241760014', 'Mikhael Tarigan', '2004-08-14', 'mikhael@polinema.ac.id', 13),
-('2341760138', 'Moch Haikal Putra Muhajir', '2005-03-23', 'mochhaikal@polinema.ac.id', 13),
-('2341760196', 'Muhammad Kemal Syahru Ramadhan', '2004-04-15', 'muhammad@polinema.ac.id', 13),
-('2341760076', 'Muhammad Satria Rahmad David', '2004-06-12', 'muhammad@polinema.ac.id', 13),
-('2341760085', 'Naafi'' Ridho Athallah', '2005-11-10', 'naafi@polinema.ac.id', 13),
-('2341760179', 'Nadya Hapsari Putri', '2004-02-23', 'nadya@polinema.ac.id', 13),
-('2341760125', 'Ramadhan Maulana Arrachman', '2005-07-30', 'ramadhan@polinema.ac.id', 13),
-('2341760056', 'Revani Nanda Putri', '2004-04-11', 'revani@polinema.ac.id', 13),
-('2341760052', 'Septian Tito Hidayahtullah', '2004-12-15', 'septian@polinema.ac.id', 13),
-('2341760100', 'Sharlyf Shaquille Syani', '2005-08-17', 'sharlyf@polinema.ac.id', 13),
-('2341760019', 'Siti Alifia Azzahra Mustofa', '2004-10-19', 'siti@polinema.ac.id', 13),
-('2341760095', 'Susilowati Syafa Adilah', '2004-11-22', 'susilowati@polinema.ac.id', 13);
+('2341760182', 'Abhinaya NuzuluZzuHDi', '2005-01-01', 'abhinaya@polinema.ac.id', 14),
+('2341760191', 'Alvi ChoirinNikmah', '2004-02-05', 'alvi@polinema.ac.id', 14),
+('2341760119', 'Alya Ajeng Ayu', '2005-03-10', 'alya@polinema.ac.id', 14),
+('2341760124', 'Ardhe Lia Putri Maharani', '2004-04-15', 'ardhe@polinema.ac.id', 14),
+('2341760003', 'Bagas Nusa Tama', '2004-05-20', 'bagas@polinema.ac.id', 14),
+('2341760162', 'BobY RozaK Saputra', '2004-01-22', 'boby@polinema.ac.id', 14),
+('2341760187', 'Deanissa Sherly Sabilla', '2005-03-28', 'deanissa@polinema.ac.id', 14),
+('2341760107', 'Eka Putri Natalya Kabelen', '2004-06-12', 'eka@polinema.ac.id', 14),
+('2341760098', 'Firman Dzaki Rahman', '2004-07-08', 'firman@polinema.ac.id', 14),
+('2341760101', 'Fransiska Widya Krisanti', '2004-08-03', 'fransiska@polinema.ac.id', 14),
+('2341760057', 'Hudha Aji Saputra', '2005-09-19', 'hudha@polinema.ac.id', 14),
+('2341760026', 'Indi Warda Ramadhani', '2005-12-30', 'indi@polinema.ac.id', 14),
+('2341760036', 'Ismi Atika', '2004-11-15', 'ismi@polinema.ac.id', 14),
+('2341760086', 'Isnaeny Tri Larassati', '2005-05-25', 'isnaeny@polinema.ac.id', 14),
+('2341760010', 'Izzatir Rofiah', '2004-01-01', 'izzatir@polinema.ac.id', 14),
+('2341760048', 'Khoir Karol Nurzuraidah', '2004-02-18', 'khoir@polinema.ac.id', 14),
+('2341760030', 'M. Zidna Billah Faza', '2005-07-21', 'm.zidna@polinema.ac.id', 14),
+('2241760014', 'Mikhael Tarigan', '2004-08-14', 'mikhael@polinema.ac.id', 14),
+('2341760138', 'Moch Haikal Putra Muhajir', '2005-03-23', 'mochhaikal@polinema.ac.id', 14),
+('2341760196', 'Muhammad Kemal Syahru Ramadhan', '2004-04-15', 'muhammad@polinema.ac.id', 14),
+('2341760076', 'Muhammad Satria Rahmad David', '2004-06-12', 'muhammad@polinema.ac.id', 14),
+('2341760085', 'Naafi'' Ridho Athallah', '2005-11-10', 'naafi@polinema.ac.id', 14),
+('2341760179', 'Nadya Hapsari Putri', '2004-02-23', 'nadya@polinema.ac.id', 14),
+('2341760125', 'Ramadhan Maulana Arrachman', '2005-07-30', 'ramadhan@polinema.ac.id', 14),
+('2341760056', 'Revani Nanda Putri', '2004-04-11', 'revani@polinema.ac.id', 14),
+('2341760052', 'Septian Tito Hidayahtullah', '2004-12-15', 'septian@polinema.ac.id', 14),
+('2341760100', 'Sharlyf Shaquille Syani', '2005-08-17', 'sharlyf@polinema.ac.id', 14),
+('2341760019', 'Siti Alifia Azzahra Mustofa', '2004-10-19', 'siti@polinema.ac.id', 14),
+('2341760095', 'Susilowati Syafa Adilah', '2004-11-22', 'susilowati@polinema.ac.id', 14);
 
 
 -- Data Dummy untuk Tabel akun
@@ -365,48 +371,4 @@ INSERT INTO ajubanding (id_pelanggaran, keterangan) VALUES
 (10, 'Banding atas dasar kelonggaran jadwal');
 
 
-USE DB_POTER;
 
--- Insert dummy data for 7 months
-DECLARE @start_date DATE = DATEADD(MONTH, -7, GETDATE());
-
--- Loop for each month within the last 7 months
-DECLARE @month INT = 1;
-WHILE @month <= 7
-BEGIN
-    DECLARE @current_month_start DATE = DATEADD(MONTH, -@month, GETDATE());
-    DECLARE @current_month_end DATE = DATEADD(DAY, -1, @current_month_start);
-    
-    -- Generate random number of rows for the month (e.g., between 5 and 20 records per month)
-    DECLARE @row_count INT = (RAND() * (20 - 5) + 5);
-    
-    -- Insert random data for this month
-    DECLARE @counter INT = 1;
-    WHILE @counter <= @row_count
-    BEGIN
-        -- Insert data for pelanggaran
-        INSERT INTO pelanggaran (keterangan, tanggal, id_mahasiswa, id_pelapor, tingkatan_pelanggaran, id_sanksi, status, foto_bukti_pelanggaran, foto_bukti_sanksi, document_sp)
-        VALUES 
-        (
-            'Pelanggaran ' + CAST(@counter AS VARCHAR(10)),  -- Random description
-            DATEADD(DAY, (RAND() * 30), @current_month_start),  -- Random date within the current month
-            (SELECT TOP 1 id FROM mahasiswa ORDER BY NEWID()),  -- Random mahasiswa
-            (SELECT TOP 1 id FROM dosen ORDER BY NEWID()),  -- Random dosen
-            (SELECT TOP 1 id FROM jenis_pelanggaran ORDER BY NEWID()),  -- Random tingkatan_pelanggaran
-            (SELECT TOP 1 id FROM jenis_sanksi ORDER BY NEWID()),  -- Random id_sanksi
-            CASE 
-                WHEN RAND() < 0.25 THEN 'resolved' 
-                WHEN RAND() < 0.5 THEN 'unresolved' 
-                WHEN RAND() < 0.75 THEN 'innocent' 
-                ELSE '' 
-            END,  -- Random status
-            'foto_bukti_' + CAST(@counter AS VARCHAR(10)) + '.jpg',  -- Random foto_bukti_pelanggaran
-            'foto_sanksi_' + CAST(@counter AS VARCHAR(10)) + '.jpg',  -- Random foto_bukti_sanksi
-            'sp_document_' + CAST(@counter AS VARCHAR(10)) + '.pdf'  -- Random document_sp
-        );
-
-        SET @counter = @counter + 1;
-    END
-
-    SET @month = @month + 1;
-END
