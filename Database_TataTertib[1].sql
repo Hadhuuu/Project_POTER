@@ -370,5 +370,47 @@ INSERT INTO ajubanding (id_pelanggaran, keterangan) VALUES
 (8, 'Banding karena terdapat bukti baru yang mendukung'),
 (10, 'Banding atas dasar kelonggaran jadwal');
 
+-- Insert dummy data for 7 months
+DECLARE @start_date DATE = DATEADD(MONTH, -7, GETDATE());
 
+-- Loop for each month within the last 7 months
+DECLARE @month INT = 1;
+WHILE @month <= 7
+BEGIN
+    DECLARE @current_month_start DATE = DATEADD(MONTH, -@month, GETDATE());
+    DECLARE @current_month_end DATE = DATEADD(DAY, -1, @current_month_start);
+    
+    -- Generate random number of rows for the month (e.g., between 5 and 20 records per month)
+    DECLARE @row_count INT = (RAND() * (20 - 5) + 5);
+    
+    -- Insert random data for this month
+    DECLARE @counter INT = 1;
+    WHILE @counter <= @row_count
+    BEGIN
+        -- Insert data for pelanggaran
+        INSERT INTO pelanggaran (keterangan, tanggal, id_mahasiswa, id_pelapor, tingkatan_pelanggaran, id_sanksi, status, foto_bukti_pelanggaran, foto_bukti_sanksi, document_sp)
+        VALUES 
+        (
+            'Pelanggaran ' + CAST(@counter AS VARCHAR(10)),  -- Random description
+            DATEADD(DAY, (RAND() * 30), @current_month_start),  -- Random date within the current month
+            (SELECT TOP 1 id FROM mahasiswa ORDER BY NEWID()),  -- Random mahasiswa
+            (SELECT TOP 1 id FROM dosen ORDER BY NEWID()),  -- Random dosen
+            (SELECT TOP 1 id FROM jenis_pelanggaran ORDER BY NEWID()),  -- Random tingkatan_pelanggaran
+            (SELECT TOP 1 id FROM jenis_sanksi ORDER BY NEWID()),  -- Random id_sanksi
+            CASE 
+                WHEN RAND() < 0.25 THEN 'resolved' 
+                WHEN RAND() < 0.5 THEN 'unresolved' 
+                WHEN RAND() < 0.75 THEN 'innocent' 
+                ELSE '' 
+            END,  -- Random status
+            'foto_bukti_' + CAST(@counter AS VARCHAR(10)) + '.jpg',  -- Random foto_bukti_pelanggaran
+            'foto_sanksi_' + CAST(@counter AS VARCHAR(10)) + '.jpg',  -- Random foto_bukti_sanksi
+            'sp_document_' + CAST(@counter AS VARCHAR(10)) + '.pdf'  -- Random document_sp
+        );
+
+        SET @counter = @counter + 1;
+    END
+
+    SET @month = @month + 1;
+END
 
