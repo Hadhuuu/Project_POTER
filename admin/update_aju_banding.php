@@ -1,7 +1,8 @@
 <?php
 session_start();
-include('../konek.php');
+require_once('../konekOOP.php'); // Pastikan path ke Database.php benar
 
+// Cek apakah user sudah login sebagai admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: index.html");
     exit();
@@ -21,21 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    // Membuat objek Database dan melakukan koneksi
+    $db = new Database();
+    
     // Query untuk update data aju banding
     $sql = "UPDATE ajubanding 
             SET keterangan = ?, status = ? 
             WHERE id = ?";
     $params = array($keterangan, $status, $id);
 
-    $stmt = sqlsrv_query($conn, $sql, $params);
-
-    if ($stmt === false) {
-        // Tangani error query
-        $errors = sqlsrv_errors();
-        echo json_encode(["message" => "Terjadi kesalahan: " . $errors[0]['message']]);
-    } else {
+    // Menjalankan query untuk update menggunakan metode execute()
+    if ($db->execute($sql, $params)) {
         echo json_encode(["message" => "Data berhasil diperbarui"]);
+    } else {
+        echo json_encode(["message" => "Terjadi kesalahan saat mengupdate data"]);
     }
+
+    // Menutup koneksi setelah selesai
+    $db->close();
 } else {
     echo json_encode(["message" => "Metode HTTP tidak valid"]);
 }
