@@ -1,9 +1,9 @@
 <?php
 session_start();
-include('../konek.php');
+require_once('../konekOOP.php'); // Pastikan path ke Database.php benar
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')
-{
+// Cek apakah user sudah login sebagai admin
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: index.html");
     exit();
 }
@@ -14,18 +14,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jenis_pelanggaran_id = $_POST['jenis_pelanggaran'];
     $jenis_sanksi_id = $_POST['jenis_sanksi'];
 
+    // Membuat objek Database untuk koneksi
+    $db = new Database();
+
     if (empty($id)) {
         // Tambah pelanggaran
         $sql = "INSERT INTO pelanggaran (nama_pelanggaran, jenis_pelanggaran_id, jenis_sanksi_id) VALUES (?, ?, ?)";
         $params = array($nama_pelanggaran, $jenis_pelanggaran_id, $jenis_sanksi_id);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        echo $stmt ? "Pelanggaran berhasil ditambahkan." : "Gagal menambahkan pelanggaran.";
+
+        // Menjalankan query untuk menambahkan data
+        if ($db->execute($sql, $params)) {
+            echo "Pelanggaran berhasil ditambahkan.";
+        } else {
+            echo "Gagal menambahkan pelanggaran.";
+        }
     } else {
         // Edit pelanggaran
         $sql = "UPDATE pelanggaran SET nama_pelanggaran = ?, jenis_pelanggaran_id = ?, jenis_sanksi_id = ? WHERE id = ?";
         $params = array($nama_pelanggaran, $jenis_pelanggaran_id, $jenis_sanksi_id, $id);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        echo $stmt ? "Pelanggaran berhasil diperbarui." : "Gagal memperbarui pelanggaran.";
+
+        // Menjalankan query untuk memperbarui data
+        if ($db->execute($sql, $params)) {
+            echo "Pelanggaran berhasil diperbarui.";
+        } else {
+            echo "Gagal memperbarui pelanggaran.";
+        }
     }
+
+    // Menutup koneksi setelah selesai
+    $db->close();
 }
 ?>

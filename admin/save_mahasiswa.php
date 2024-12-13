@@ -1,7 +1,8 @@
 <?php
 session_start();
-include('../konek.php');
+require_once('../konekOOP.php'); // Pastikan path ke Database.php benar
 
+// Cek apakah user sudah login sebagai admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: index.html");
     exit();
@@ -15,18 +16,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $id_kelas = $_POST['id_kelas'];
 
+    // Membuat objek Database untuk koneksi
+    $db = new Database();
+
     if (empty($id)) {
         // Tambah mahasiswa
         $sql = "INSERT INTO mahasiswa (nim, nama, ttl, email, id_kelas) VALUES (?, ?, ?, ?, ?)";
         $params = array($nim, $nama, $ttl, $email, $id_kelas);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        echo $stmt ? "Mahasiswa berhasil ditambahkan." : "Gagal menambahkan mahasiswa.";
+
+        // Menjalankan query untuk menambahkan data
+        if ($db->execute($sql, $params)) {
+            echo "Mahasiswa berhasil ditambahkan.";
+        } else {
+            echo "Gagal menambahkan mahasiswa.";
+        }
     } else {
         // Edit mahasiswa
         $sql = "UPDATE mahasiswa SET nim = ?, nama = ?, ttl = ?, email = ?, id_kelas = ? WHERE id = ?";
         $params = array($nim, $nama, $ttl, $email, $id_kelas, $id);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        echo $stmt ? "Mahasiswa berhasil diperbarui." : "Gagal memperbarui mahasiswa.";
+
+        // Menjalankan query untuk memperbarui data
+        if ($db->execute($sql, $params)) {
+            echo "Mahasiswa berhasil diperbarui.";
+        } else {
+            echo "Gagal memperbarui mahasiswa.";
+        }
     }
+
+    // Menutup koneksi setelah selesai
+    $db->close();
 }
 ?>
