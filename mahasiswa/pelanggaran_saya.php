@@ -101,7 +101,7 @@ $.ajax({
     success: function(data) {
         let pelanggaranHtml = '';
         data.forEach(function(pelanggaran) {
-            let statusClass = pelanggaran.status === 'Resolved' ? 'bg-green-500' : (pelanggaran.status === 'Unresolved' ? 'bg-red-500' : 'bg-gray-500');
+            let statusClass = pelanggaran.status === 'Resolved' || pelanggaran.status === 'resolved' ? 'bg-green-500' : (pelanggaran.status === 'Unresolved' || pelanggaran.status === 'unresolved' ? 'bg-red-500' : 'bg-gray-500');
             
             // HTML for each violation
             pelanggaranHtml += `
