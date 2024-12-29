@@ -81,6 +81,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
                     <!-- Data mahasiswa akan dimuat di sini -->
                 </tbody>
             </table>
+            <div id="pagination" class="mt-4 flex justify-between items-center">
+                <button id="prevPage" class="bg-blue-600 text-white px-4 py-2 rounded-md" disabled>Previous</button>
+                <span id="pageInfo" class="text-lg font-medium text-gray-700">Page 1 dari 1</span>
+                <button id="nextPage" class="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>
+            </div>
         </div>
     </div>
 
@@ -115,34 +120,59 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
     <script>
         $(document).ready(function() {
-            loadMahasiswa();
+            var currentPage = 1;
 
-            // Fungsi untuk memuat data mahasiswa
-            function loadMahasiswa() {
-                $.ajax({
-                    url: 'get_mahasiswa.php',
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#mahasiswaTable tbody').empty();
-                        data.forEach(function(mahasiswa) {
-                            $('#mahasiswaTable tbody').append(`
-                                <tr>
-                                    <td class="px-6 py-3">${mahasiswa.nim}</td>
-                                    <td class="px-6 py-3">${mahasiswa.nama}</td>
-                                    <td class="px-6 py-3">${mahasiswa.ttl}</td>
-                                    <td class="px-6 py-3">${mahasiswa.email}</td>
-                                    <td class="px-6 py-3">${mahasiswa.nama_kelas}</td>
-                                    <td class="px-6 py-3">
-                                        <button class="editBtn bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" data-id="${mahasiswa.id}">Edit</button>
-                                        <button class="deleteBtn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" data-id="${mahasiswa.id}">Hapus</button>
-                                    </td>
-                                </tr>
-                            `);
-                        });
-                    }
-                });
-            }
+            function loadMahasiswa(page) {
+            $.ajax({
+                url: 'get_mahasiswa.php',
+                method: 'GET',
+                data: { page: page },
+                dataType: 'json',
+                success: function(response) {
+                    // Clear existing data
+                    $('#mahasiswaTable tbody').empty();
+                    response.data.forEach(function(mahasiswa) {
+                        $('#mahasiswaTable tbody').append(`
+                            <tr>
+                                <td class="px-6 py-3">${mahasiswa.nim}</td>
+                                <td class="px-6 py-3">${mahasiswa.nama}</td>
+                                <td class="px-6 py-3">${mahasiswa.ttl}</td>
+                                <td class="px-6 py-3">${mahasiswa.email}</td>
+                                <td class="px-6 py-3">${mahasiswa.nama_kelas}</td>
+                                <td class="px-6 py-3">
+                                    <button class="editBtn bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" data-id="${mahasiswa.id}">Edit</button>
+                                    <button class="deleteBtn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" data-id="${mahasiswa.id}">Hapus</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+
+                    // Update pagination
+                    $('#pageInfo').text('Page ' + response.currentPage + ' of ' + response.totalPages);
+                    currentPage = response.currentPage; // update current page number
+
+                    // Disable previous and next buttons if on first or last page
+                    $('#prevPage').prop('disabled', currentPage === 1);
+                    $('#nextPage').prop('disabled', currentPage === response.totalPages);
+                }
+            });
+        }
+
+
+            // Load initial page
+            loadMahasiswa(currentPage);
+
+            // Handle previous page click
+            $('#prevPage').click(function() {
+                if (currentPage > 1) {
+                    loadMahasiswa(currentPage - 1);
+                }
+            });
+
+            // Handle next page click
+            $('#nextPage').click(function() {
+                loadMahasiswa(currentPage + 1);
+            });
 
             // Menangani klik tombol tambah mahasiswa
             $('#addMahasiswaBtn').click(function() {

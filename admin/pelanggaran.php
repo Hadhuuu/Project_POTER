@@ -99,7 +99,18 @@
                     <!-- Data pelanggaran akan dimuat di sini -->
                 </tbody>
             </table>
+            <!-- Tambahkan di bawah tabel -->
+            <div class="flex justify-between items-center mt-4">
+                <div id="pageInfo" class="text-gray-700">Halaman 1 dari 1</div>
+                <div>
+                    <button id="prevBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2" disabled>Prev</button>
+                    <button id="nextBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md" disabled>Next</button>
+                </div>
+            </div>
+
+
         </div>
+        
     </div>
 
     <!-- Modal untuk Lihat Keterangan -->
@@ -131,66 +142,100 @@
 
     <script>
         $(document).ready(function() {
-            loadPelanggaran();
+            let currentPage = 1;
 
-            // Menampilkan data pelanggaran
-            function loadPelanggaran() {
-                $.ajax({
-                    url: 'get_pelanggaran.php',
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        const tableBody = $('#pelanggaranTable tbody');
-                        tableBody.empty();
-                        data.forEach(function(pelanggaran) {
-                            const row = `
-                                <tr>
-                                    <td class="px-6 py-3">${pelanggaran.id}</td>
-                                    <td class="px-6 py-3">${pelanggaran.nama_mahasiswa}</td>
-                                    <td class="px-6 py-3"><span class="keterangan" onclick="showKeterangan('${pelanggaran.keterangan}')">${pelanggaran.keterangan.slice(0, 50)}...</span></td>
-                                    <td class="px-6 py-3">${pelanggaran.tanggal}</td>
-                                    <td class="px-6 py-3">${pelanggaran.nama_dosen}</td>
-                                    <td class="px-6 py-3">${pelanggaran.tingkatan}</td>
-                                    <td class="px-6 py-3">
-                                        <span class="px-4 py-2 rounded-full ${
-                                            pelanggaran.status === 'Resolved' || pelanggaran.status === 'resolved'? 'bg-green-500' :
-                                            pelanggaran.status === 'Unresolved' || pelanggaran.status === 'unresolved' ? 'bg-red-500' :
-                                            pelanggaran.status === 'Innocent' || pelanggaran.status === 'innocent'  ? 'bg-gray-500' : ''}">
-                                            ${pelanggaran.status}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-3">
-                                        <img src="${pelanggaran.foto_bukti_pelanggaran}" alt="Foto Bukti Pelanggaran" class="w-12 h-12 object-cover rounded border cursor-pointer" onclick="window.open('${pelanggaran.foto_bukti_pelanggaran}', '_blank')">
-                                    </td>
-                                    <td class="px-6 py-3">
-                                        <img src="../uploads/${pelanggaran.foto_bukti_sanksi}" alt="Foto Bukti Sanksi" class="w-12 h-12 object-cover rounded border cursor-pointer" onclick="window.open('../uploads/${pelanggaran.foto_bukti_sanksi}', '_blank')">
-                                    </td>
-                                    <td class="px-6 py-3">
-                                        <a href="../uploads/${pelanggaran.document_sp}" class="text-blue-600 underline" target="_blank">Lihat Surat Pernyataan</a>
-                                    </td>
-                                    <td class="px-6 py-3">
-                                        <button class="editBtn bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" data-id="${pelanggaran.id}">Edit</button>
-                                    </td>
-                                </tr>
-                            `;
-                            tableBody.append(row);
-                        });
-                    }
+    // Load data pelanggaran dengan pagination
+    function loadPelanggaran(page) {
+        $.ajax({
+            url: 'get_pelanggaran.php',
+            method: 'GET',
+            data: { page: page },
+            dataType: 'json',
+            success: function(response) {
+                const tableBody = $('#pelanggaranTable tbody');
+                tableBody.empty();
+                response.data.forEach(function(pelanggaran) {
+                    const row = `
+                        <tr>
+                            <td class="px-6 py-3">${pelanggaran.id}</td>
+                            <td class="px-6 py-3">${pelanggaran.nama_mahasiswa}</td>
+                            <td class="px-6 py-3"><span class="keterangan" onclick="showKeterangan('${pelanggaran.keterangan}')">${pelanggaran.keterangan.slice(0, 50)}...</span></td>
+                            <td class="px-6 py-3">${pelanggaran.tanggal}</td>
+                            <td class="px-6 py-3">${pelanggaran.nama_dosen}</td>
+                            <td class="px-6 py-3">${pelanggaran.tingkatan}</td>
+                            <td class="px-6 py-3">
+                                <span class="px-4 py-2 rounded-full ${
+                                    pelanggaran.status === 'Resolved' || pelanggaran.status === 'resolved' ? 'bg-green-500' :
+                                    pelanggaran.status === 'Unresolved' || pelanggaran.status === 'unresolved' ? 'bg-red-500' :
+                                    pelanggaran.status === 'Innocent' || pelanggaran.status === 'innocent' ? 'bg-gray-500' : ''}">
+                                    ${pelanggaran.status}
+                                </span>
+                            </td>
+                            <td class="px-6 py-3">
+                                <img src="${pelanggaran.foto_bukti_pelanggaran}" alt="Foto Bukti Pelanggaran" class="w-12 h-12 object-cover rounded border cursor-pointer" onclick="window.open('${pelanggaran.foto_bukti_pelanggaran}', '_blank')">
+                            </td>
+                            <td class="px-6 py-3">
+                                <img src="../uploads/${pelanggaran.foto_bukti_sanksi}" alt="Foto Bukti Sanksi" class="w-12 h-12 object-cover rounded border cursor-pointer" onclick="window.open('../uploads/${pelanggaran.foto_bukti_sanksi}', '_blank')">
+                            </td>
+                            <td class="px-6 py-3">
+                                <a href="../uploads/${pelanggaran.document_sp}" class="text-blue-600 underline" target="_blank">Lihat Surat Pernyataan</a>
+                            </td>
+                            <td class="px-6 py-3">
+                                <button class="editBtn bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" data-id="${pelanggaran.id}">Edit</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.append(row);
                 });
+
+                // Update informasi halaman
+                $('#pageInfo').text(`Halaman ${response.currentPage} dari ${response.totalPages}`);
+                
+                // Menampilkan tombol prev/next
+                if (response.currentPage > 1) {
+                    $('#prevBtn').prop('disabled', false);
+                } else {
+                    $('#prevBtn').prop('disabled', true);
+                }
+
+                if (response.currentPage < response.totalPages) {
+                    $('#nextBtn').prop('disabled', false);
+                } else {
+                    $('#nextBtn').prop('disabled', true);
+                }
             }
+        });
+    }
 
-            // Filter berdasarkan nama mahasiswa
-            $('#searchInput').on('keyup', function() {
-                const searchTerm = $(this).val().toLowerCase();
-                $('#pelanggaranTable tbody tr').each(function() {
-                    const studentName = $(this).find('td').eq(1).text().toLowerCase();
-                    if (studentName.indexOf(searchTerm) > -1) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
+    // Load data pertama kali
+    loadPelanggaran(currentPage);
+
+    // Tombol prev
+    $('#prevBtn').click(function() {
+        if (currentPage > 1) {
+            currentPage--;
+            loadPelanggaran(currentPage);
+        }
+    });
+
+    // Tombol next
+    $('#nextBtn').click(function() {
+        currentPage++;
+        loadPelanggaran(currentPage);
+    });
+
+        // Filter berdasarkan nama mahasiswa
+        $('#searchInput').on('keyup', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            $('#pelanggaranTable tbody tr').each(function() {
+                const studentName = $(this).find('td').eq(1).text().toLowerCase();
+                if (studentName.indexOf(searchTerm) > -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
             });
+        });
 
             // Tampilkan modal untuk keterangan
             window.showKeterangan = function(keterangan) {

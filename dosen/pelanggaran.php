@@ -9,13 +9,16 @@
     <style>
         /* Tabel dengan scroll dan efek hover */
         #pelanggaranTable {
-            max-height: 695x;
-            overflow-y: auto;
+            max-height: 650px; /* Batas tinggi tabel */
+            overflow-y: auto; /* Scroll vertikal */
             display: block;
         }
+
         #pelanggaranTable tbody tr:hover {
             background-color: #f3f4f6;
         }
+
+        /* Status kotak */
         .status-box {
             width: 100px;
             padding: 5px;
@@ -32,6 +35,8 @@
         .innocent {
             background-color: #A9A9A9; /* Grey */
         }
+
+        /* Tombol pagination */
         .btn-blue {
             background-color: #007BFF;
             color: white;
@@ -41,6 +46,13 @@
         }
         .btn-blue:hover {
             background-color: #0056b3;
+        }
+
+        /* Letakkan tombol di bawah tabel */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -108,6 +120,12 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- Paginasi -->
+                <div class="pagination-container">
+                    <button id="prevPage" class="btn-blue disabled" disabled>Previous</button>
+                    <span id="pageInfo" class="text-gray-600">Page 1 of 1</span>
+                    <button id="nextPage" class="btn-blue">Next</button>
+                </div>
             </div>
         </div>
     </div>
@@ -115,16 +133,17 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Fungsi untuk memuat data pelanggaran
-            function loadPelanggaran(status = '') {
+            let currentPage = 1;
+
+            function loadPelanggaran(status = '', page = 1) {
                 $.ajax({
                     url: 'get_pelanggaran.php',
                     method: 'GET',
                     dataType: 'json',
-                    data: { status: status },
-                    success: function(data) {
+                    data: { status: status, page: page },
+                    success: function(response) {
                         $('#pelanggaranTbody').empty();
-                        data.forEach(function(pelanggaran) {
+                        response.data.forEach(function(pelanggaran) {
                             var statusClass = '';
                             if (pelanggaran.status == 'Resolved' || pelanggaran.status == 'resolved') {
                                 statusClass = 'resolved';
@@ -163,6 +182,21 @@
                                 </tr>
                             `);
                         });
+
+                        $('#pageInfo').text(`Page ${response.currentPage} of ${response.totalPages}`);
+                        currentPage = response.currentPage;
+
+                        // Update tombol Previous dan Next
+                        if (currentPage === 1) {
+                            $('#prevPage').prop('disabled', true);
+                        } else {
+                            $('#prevPage').prop('disabled', false);
+                        }
+                        if (currentPage === response.totalPages) {
+                            $('#nextPage').prop('disabled', true);
+                        } else {
+                            $('#nextPage').prop('disabled', false);
+                        }
                     }
                 });
             }
@@ -173,7 +207,19 @@
             // Event listener untuk filter status
             $('#statusPelanggaranFilter').change(function() {
                 var selectedStatus = $(this).val();
-                loadPelanggaran(selectedStatus);
+                loadPelanggaran(selectedStatus, 1);  // Muat halaman pertama dengan filter
+            });
+
+            // Event listener untuk tombol Previous
+            $('#prevPage').click(function() {
+                if (currentPage > 1) {
+                    loadPelanggaran($('#statusPelanggaranFilter').val(), currentPage - 1);
+                }
+            });
+
+            // Event listener untuk tombol Next
+            $('#nextPage').click(function() {
+                loadPelanggaran($('#statusPelanggaranFilter').val(), currentPage + 1);
             });
         });
     </script>

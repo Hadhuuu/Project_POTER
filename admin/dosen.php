@@ -76,7 +76,26 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
                     <!-- Data dosen akan dimuat di sini -->
                 </tbody>
             </table>
+            <div id="pagination" class="mt-6 flex items-center justify-between">
+                <div>
+                    <button id="prevBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" disabled>
+                        Prev
+                    </button>
+                </div>
+                <div class="text-center">
+                    <span id="pageInfo" class="text-lg font-medium text-gray-700">Halaman 1 dari 1</span>
+                </div>
+                <div>
+                    <button id="nextBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Next
+                    </button>
+                </div>
+            </div>
+
+
         </div>
+        
+
     </div>
 
     <!-- Modal untuk Tambah/Edit Dosen -->
@@ -97,90 +116,128 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
     <script>
         $(document).ready(function() {
-            loadDosen();
+    let currentPage = 1; // Halaman saat ini
 
-            function loadDosen() {
-                $.ajax({
-                    url: 'get_dosen.php',
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#dosenTable tbody').empty();
-                        data.forEach(function(dosen) {
-                            $('#dosenTable tbody').append(`
-                                <tr>
-                                    <td class="px-6 py-3">${dosen.nidn}</td>
-                                    <td class="px-6 py-3">${dosen.nama}</td>
-                                    <td class="px-6 py-3">${dosen.email}</td>
-                                    <td class="px-6 py-3">
-                                        <button class="editBtn bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" data-id="${dosen.id}">Edit</button>
-                                        <button class="deleteBtn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" data-id="${dosen.id}">Hapus</button>
-                                    </td>
-                                </tr>
-                            `);
-                        });
-                    }
+    // Fungsi untuk memuat data dosen
+    function loadDosen(page = 1) {
+        $.ajax({
+            url: 'get_dosen.php',
+            method: 'GET',
+            data: { page: page },
+            dataType: 'json',
+            success: function(response) {
+                $('#dosenTable tbody').empty();
+                response.data.forEach(function(dosen) {
+                    $('#dosenTable tbody').append(`
+                        <tr>
+                            <td class="px-6 py-3">${dosen.nidn}</td>
+                            <td class="px-6 py-3">${dosen.nama}</td>
+                            <td class="px-6 py-3">${dosen.email}</td>
+                            <td class="px-6 py-3">
+                                <button class="editBtn bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" data-id="${dosen.id}">Edit</button>
+                                <button class="deleteBtn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" data-id="${dosen.id}">Hapus</button>
+                            </td>
+                        </tr>
+                    `);
                 });
+
+                // Menampilkan informasi halaman
+                const totalPages = response.totalPages;
+                $('#pageInfo').text(`Halaman ${response.currentPage} dari ${totalPages}`);
+
+                // Menonaktifkan tombol Next/Prev jika sudah mencapai batas
+                if (currentPage <= 1) {
+                    $('#prevBtn').attr('disabled', true);
+                } else {
+                    $('#prevBtn').attr('disabled', false);
+                }
+
+                if (currentPage >= totalPages) {
+                    $('#nextBtn').attr('disabled', true);
+                } else {
+                    $('#nextBtn').attr('disabled', false);
+                }
             }
+        });
+    }
 
-            $('#addDosenBtn').click(function() {
-                $('#modalTitle').text('Tambah Dosen');
-                $('#dosenForm')[0].reset();
-                $('#dosenId').val('');
+    // Memuat data dosen pada halaman pertama
+    loadDosen(currentPage);
+
+    // Tombol Next untuk halaman berikutnya
+    $('#nextBtn').click(function() {
+        currentPage++;
+        loadDosen(currentPage);
+    });
+
+    // Tombol Prev untuk halaman sebelumnya
+    $('#prevBtn').click(function() {
+        currentPage--;
+        loadDosen(currentPage);
+    });
+
+    // Fungsi untuk menambahkan dosen baru
+    $('#addDosenBtn').click(function() {
+        $('#modalTitle').text('Tambah Dosen');
+        $('#dosenForm')[0].reset();
+        $('#dosenId').val('');
+        $('#dosenModal').show();
+    });
+
+    // Form submit untuk menyimpan data dosen
+    $('#dosenForm').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'save_dosen.php',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                alert(response);
+                loadDosen(currentPage); // Memuat ulang data dosen setelah disimpan
+                $('#dosenModal').hide();
+            }
+        });
+    });
+
+    // Edit dan delete dosen
+    $(document).on('click', '.editBtn', function() {
+        const id = $(this).data('id');
+        $.ajax({
+            url: 'get_dosen.php',
+            method: 'GET',
+            data: { id: id },
+            dataType: 'json',
+            success: function(dosen) {
+                $('#modalTitle').text('Edit Dosen');
+                $('#dosenId').val(dosen.id);
+                $('#nidn').val(dosen.nidn);
+                $('#nama').val(dosen.nama);
+                $('#email').val(dosen.email);
                 $('#dosenModal').show();
-            });
+            }
+        });
+    });
 
-            $('#dosenForm').submit(function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: 'save_dosen.php',
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        alert(response);
-                        loadDosen();
-                        $('#dosenModal').hide();
-                    }
-                });
-            });
-
-            $(document).on('click', '.editBtn', function() {
-                const id = $(this).data('id');
-                $.ajax({
-                    url: 'get_dosen.php',
-                    method: 'GET',
-                    data: { id: id },
-                    dataType: 'json',
-                    success: function(dosen) {
-                        $('#modalTitle').text('Edit Dosen');
-                        $('#dosenId').val(dosen.id);
-                        $('#nidn').val(dosen.nidn);
-                        $('#nama').val(dosen.nama);
-                        $('#email').val(dosen.email);
-                        $('#dosenModal').show();
-                    }
-                });
-            });
-
-            $(document).on('click', '.deleteBtn', function() {
-                const id = $(this).data('id');
-                if (confirm('Apakah Anda yakin ingin menghapus dosen ini?')) {
-                    $.ajax({
-                        url: 'delete_dosen.php',
-                        method: 'POST',
-                        data: { id: id },
-                        success: function(response) {
-                            alert(response);
-                            loadDosen();
-                        }
-                    });
+    $(document).on('click', '.deleteBtn', function() {
+        const id = $(this).data('id');
+        if (confirm('Apakah Anda yakin ingin menghapus dosen ini?')) {
+            $.ajax({
+                url: 'delete_dosen.php',
+                method: 'POST',
+                data: { id: id },
+                success: function(response) {
+                    alert(response);
+                    loadDosen(currentPage); // Memuat ulang data dosen setelah dihapus
                 }
             });
+        }
+    });
 
-            $('#closeModalBtn').click(function() {
-                $('#dosenModal').hide();
-            });
-        });
+    $('#closeModalBtn').click(function() {
+        $('#dosenModal').hide();
+    });
+});
+
     </script>
 </body>
 </html>
