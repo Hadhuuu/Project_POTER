@@ -80,7 +80,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
     <!-- Modal untuk Tambah/Edit Kelas -->
     <div id="kelasModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96 mt-48 ml-auto mr-auto">
             <h2 id="modalTitle" class="text-xl font-semibold mb-4">Tambah Kelas</h2>
             <form id="kelasForm">
                 <input type="hidden" id="kelasId" name="kelasId">

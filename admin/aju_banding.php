@@ -94,7 +94,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
     <!-- Modal untuk Edit Aju Banding -->
     <div id="ajuBandingModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96 mt-48 ml-auto mr-auto">
             <h2 id="modalTitle" class="text-xl font-semibold mb-4">Edit Aju Banding</h2>
             <form id="ajuBandingForm">
                 <input type="hidden" id="ajuBandingId" name="ajuBandingId">

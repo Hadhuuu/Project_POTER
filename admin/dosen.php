@@ -80,8 +80,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     </div>
 
     <!-- Modal untuk Tambah/Edit Dosen -->
-    <div id="dosenModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <div id="dosenModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96 mt-48 ml-auto mr-auto">
             <h2 id="modalTitle" class="text-xl font-semibold mb-4">Tambah Dosen</h2>
             <form id="dosenForm">
                 <input type="hidden" id="dosenId" name="dosenId">
@@ -93,6 +93,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             </form>
         </div>
     </div>
+
 
     <script>
         $(document).ready(function() {

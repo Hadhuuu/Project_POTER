@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../konek.php');
+require_once('../konekOOP.php'); // Pastikan path ke Database.php benar
 
 // Pastikan hanya admin yang bisa mengakses halaman ini
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
@@ -13,18 +13,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $keterangan = $_POST['keterangan'];
     $tingkatan = $_POST['tingkatan'];
 
-    if (!empty($id)) {
-        // Jika ID ada, berarti memperbarui data yang sudah ada
-        $sql = "UPDATE jenis_sanksi SET keterangan = ?, tingkatan = ? WHERE id = ?";
-        $params = array($keterangan, $tingkatan, $id);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        if ($stmt) {
-            echo "Data berhasil diperbarui!";
-        } else {
-            echo "Terjadi kesalahan saat memperbarui data.";
-        }
-    } else {
-        echo "ID tidak valid!";
+    // Validasi input
+    if (empty($id) || empty($keterangan) || empty($tingkatan)) {
+        echo "Semua field harus diisi.";
+        exit();
     }
+
+    // Membuat objek Database dan melakukan koneksi
+    $db = new Database();
+
+    // Memperbarui data jenis sanksi
+    $sql = "UPDATE jenis_sanksi SET keterangan = ?, tingkatan = ? WHERE id = ?";
+    $params = array($keterangan, $tingkatan, $id);
+
+    // Menjalankan query menggunakan metode execute()
+    if ($db->execute($sql, $params)) {
+        echo "Data berhasil diperbarui!";
+    } else {
+        echo "Terjadi kesalahan saat memperbarui data.";
+    }
+
+    // Menutup koneksi setelah selesai
+    $db->close();
 }
 ?>

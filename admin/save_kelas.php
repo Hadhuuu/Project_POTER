@@ -1,7 +1,8 @@
 <?php
 session_start();
-include('../konek.php');
+require_once('../konekOOP.php'); // Pastikan path ke Database.php benar
 
+// Cek apakah user sudah login sebagai admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: index.html");
     exit();
@@ -11,18 +12,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['kelasId'];
     $nama_kelas = $_POST['nama_kelas'];
 
+    // Validasi input
+    if (empty($nama_kelas)) {
+        echo "Nama kelas tidak boleh kosong.";
+        exit();
+    }
+
+    // Membuat objek Database dan melakukan koneksi
+    $db = new Database();
+
     if (empty($id)) {
-        // Tambah kelas
+        // Menambahkan kelas baru
         $sql = "INSERT INTO kelas (nama_kelas) VALUES (?)";
         $params = array($nama_kelas);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        echo $stmt ? "Kelas berhasil ditambahkan." : "Gagal menambahkan kelas.";
+
+        // Menjalankan query menggunakan metode execute()
+        if ($db->execute($sql, $params)) {
+            echo "Kelas berhasil ditambahkan.";
+        } else {
+            echo "Gagal menambahkan kelas.";
+        }
     } else {
-        // Edit kelas
+        // Mengedit kelas yang sudah ada
         $sql = "UPDATE kelas SET nama_kelas = ? WHERE id = ?";
         $params = array($nama_kelas, $id);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        echo $stmt ? "Kelas berhasil diperbarui." : "Gagal memperbarui kelas.";
+
+        // Menjalankan query menggunakan metode execute()
+        if ($db->execute($sql, $params)) {
+            echo "Kelas berhasil diperbarui.";
+        } else {
+            echo "Gagal memperbarui kelas.";
+        }
     }
+
+    // Menutup koneksi setelah selesai
+    $db->close();
 }
 ?>

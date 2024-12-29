@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../konek.php');
+require_once('../konekOOP.php'); // Pastikan path ke Database.php benar
 
 // Pastikan hanya admin yang bisa mengakses halaman ini
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
@@ -13,26 +13,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $keterangan = $_POST['nama_pelanggaran'];
     $tingkatan = $_POST['tingkatan'];
 
+    // Validasi input
+    if (empty($keterangan) || empty($tingkatan)) {
+        echo "Semua field harus diisi.";
+        exit();
+    }
+
+    // Membuat objek Database dan melakukan koneksi
+    $db = new Database();
+
     if (empty($id)) {
-        // Jika ID kosong, berarti menambah data baru
+        // Menambah data baru jika ID kosong
         $sql = "INSERT INTO jenis_pelanggaran (keterangan, tingkatan) VALUES (?, ?)";
         $params = array($keterangan, $tingkatan);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        if ($stmt) {
+
+        // Menjalankan query menggunakan metode execute()
+        if ($db->execute($sql, $params)) {
             echo "Data berhasil ditambahkan!";
         } else {
             echo "Terjadi kesalahan saat menambahkan data.";
         }
     } else {
-        // Jika ID ada, berarti memperbarui data yang sudah ada
+        // Memperbarui data jika ID ada
         $sql = "UPDATE jenis_pelanggaran SET keterangan = ?, tingkatan = ? WHERE id = ?";
         $params = array($keterangan, $tingkatan, $id);
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        if ($stmt) {
+
+        // Menjalankan query menggunakan metode execute()
+        if ($db->execute($sql, $params)) {
             echo "Data berhasil diperbarui!";
         } else {
             echo "Terjadi kesalahan saat memperbarui data.";
         }
     }
+
+    // Menutup koneksi setelah selesai
+    $db->close();
 }
 ?>

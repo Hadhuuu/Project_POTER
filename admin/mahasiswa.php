@@ -32,6 +32,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             width: 100%;
             table-layout: fixed;
         }
+
+
     </style>
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
@@ -82,31 +84,34 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         </div>
     </div>
 
-    <!-- Modal untuk Tambah/Edit Mahasiswa -->
-    <div id="mahasiswaModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden" >
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 id="modalTitle" class="text-xl font-semibold mb-4">Tambah Mahasiswa</h2>
-            <form id="mahasiswaForm">
-                <input type="hidden" id="mahasiswaId" name="mahasiswaId">
-                <input type="text" id="nim" name="nim" placeholder="NIM" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
-                <input type="text" id="nama" name="nama" placeholder="Nama" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
-                <input type="date" id="ttl" name="ttl" placeholder="Tanggal Lahir" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
-                <input type="email" id="email" name="email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
-                <select id="id_kelas" name="id_kelas" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
-                    <option value="">Pilih Kelas</option>
-                    <?php
-                    $sql = "SELECT * FROM kelas";
-                    $stmt = sqlsrv_query($conn, $sql);
-                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                        echo "<option value='{$row['id']}'>{$row['nama_kelas']}</option>";
-                    }
-                    ?>
-                </select>
-                <button type="submit" id="saveMahasiswaBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 mr-2">Simpan</button>
+<!-- Modal untuk Tambah/Edit Mahasiswa -->
+<div id="mahasiswaModal" class="fixed hidden bg-black bg-opacity-50 inset-0 flex justify-center items-start z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm lg:max-w-md w-full mt-48 ml-auto mr-auto"> <!-- Adjust ml-auto and mr-auto -->
+        <h2 id="modalTitle" class="text-xl font-semibold mb-4 text-center">Tambah Mahasiswa</h2>
+        <form id="mahasiswaForm">
+            <input type="hidden" id="mahasiswaId" name="mahasiswaId">
+            <input type="text" id="nim" name="nim" placeholder="NIM" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
+            <input type="text" id="nama" name="nama" placeholder="Nama" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
+            <input type="date" id="ttl" name="ttl" placeholder="Tanggal Lahir" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
+            <input type="email" id="email" name="email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
+            <select id="id_kelas" name="id_kelas" class="w-full p-2 border border-gray-300 rounded-md mb-4" required>
+                <option value="">Pilih Kelas</option>
+                <?php
+                $sql = "SELECT * FROM kelas";
+                $stmt = sqlsrv_query($conn, $sql);
+                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                    echo "<option value='{$row['id']}'>{$row['nama_kelas']}</option>";
+                }
+                ?>
+            </select>
+            <div class="flex justify-between">
+                <button type="submit" id="saveMahasiswaBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Simpan</button>
                 <button type="button" id="closeModalBtn" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">Tutup</button>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
+</div>
+
 
     <script>
         $(document).ready(function() {

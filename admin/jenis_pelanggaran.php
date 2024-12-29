@@ -81,7 +81,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
     <!-- Modal untuk Tambah/Edit Jenis Pelanggaran -->
     <div id="pelanggaranModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96 mt-48 ml-auto mr-auto">
         <h2 id="modalTitle" class="text-xl font-semibold mb-4">Tambah Jenis Pelanggaran</h2>
         <form id="pelanggaranForm">
             <input type="hidden" id="pelanggaranId" name="pelanggaranId">

@@ -62,7 +62,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         <!-- Main Content -->
         <div class="flex-1 p-6">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">Data Jenis Sanksi</h2>
-            <button id="addSanksiBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 hover:scale-105 transition transform duration-300 mb-6">Tambah Jenis Sanksi</button>
+
             <table id="sanksiTable" class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead>
                     <tr class="bg-blue-900 text-white">
@@ -82,7 +82,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
     <!-- Modal untuk Update Jenis Sanksi -->
         <div id="sanksiModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96 mt-48 ml-auto mr-auto">
                 <h2 id="modalTitle" class="text-xl font-semibold mb-4">Edit Jenis Sanksi</h2>
                 <form id="sanksiForm">
                     <input type="hidden" id="sanksiId" name="sanksiId">
